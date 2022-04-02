@@ -3,7 +3,7 @@ import ast
 
 def not_exist(a,v):
     if not a:
-        return False
+        return True
     for value in a:
         if(value==v):
             return False
