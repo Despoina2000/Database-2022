@@ -1,6 +1,15 @@
 import csv
 import ast
 
+def not_exist(a,v):
+    if not a:
+        return False
+    for value in a:
+        if(value==v):
+            return False
+
+    return True
+
 f1 = open("dataset/keyword.csv", 'w')
 f2 = open("dataset/movie_keywords.csv", 'w')
 f3= open("dataset/keywords.csv",'r')
@@ -10,7 +19,7 @@ writer1 = csv.writer(f1)
 writer2 = csv.writer(f2)
 writer1.writerow(['movie_id','keyword_id'])
 writer2.writerow(['id','name'])
-
+array=[]
 for row in csvreader:
     if row[1]=='[]':
         print('SKIP...')
@@ -19,7 +28,9 @@ for row in csvreader:
     
     for json in data:
         writer2.writerow([int(row[0]),json['id']])
-        writer1.writerow([json['id'],json['name']])
+        if(not_exist(array,json['id'])):
+            array.append(json['id'])
+            writer1.writerow([json['id'],json['name']])
 
  
 
