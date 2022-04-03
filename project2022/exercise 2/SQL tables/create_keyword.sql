@@ -1,5 +1,5 @@
 CREATE TABLE Keyword(
-   keyword_id   INTEGER  NOT NULL 
-  ,keyword          CHAR(32) NOT NULL
-  ,PRIMARY KEY(keyword_id)
+   k_id   INTEGER  NOT NULL 
+  ,keyword          CHAR(100) NOT NULL
+  ,PRIMARY KEY(k_id)
 );

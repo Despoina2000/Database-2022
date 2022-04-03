@@ -10,15 +10,15 @@ def not_exist(a,v):
 
     return True
 
-f1 = open("dataset/keyword.csv", 'w',encoding="utf8")
-f2 = open("dataset/movie_keywords.csv", 'w',encoding="utf8")
-f3= open("dataset/keywords.csv",'r',encoding="utf8")
+f1 = open("dataset/keyword.csv", 'w',encoding="utf8",newline='')
+f2 = open("dataset/movie_keywords.csv", 'w',encoding="utf8",newline='')
+f3= open("dataset/keywords.csv",'r',encoding="utf8",newline='')
 csvreader = csv.reader(f3)
 header = next(csvreader)
 writer1 = csv.writer(f1)
 writer2 = csv.writer(f2)
-writer1.writerow(['movie_id','keyword_id'])
-writer2.writerow(['id','name'])
+writer1.writerow(['id','name'])
+writer2.writerow(['movie_id','keyword_id'])
 array=[]
 for row in csvreader:
     if row[1]=='[]':
