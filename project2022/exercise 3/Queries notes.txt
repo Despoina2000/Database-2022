@@ -21,24 +21,44 @@
 
 * The Queries:
 
-    ~ ονόματα ταινιών από συλλογές που έχουν μέγιστη βαθμολογία πάνω από 4  
-    Π Collection.name,Movie.title[
-        σ max.rating>4(Ratings JOIN Movie) 
-        AND σ Collection.id= Movie_Collection. collection_id(Collection X Movie_Collection) 
-        AND σ Movie. m_id= Movie_Collection. movie_id (Movie X Movie_Collection) ]
+    ~ ονόματα ταινιών από συλλογές που έχουν μέγιστη βαθμολογία πάνω από 4 (GROUP BY Collection.name) 
+    Π Collection.name,Movie.title, Ratings.rating[ 
+        σ max.rating>4(Ratings X (
+            σ Collection.id= Movie_Collection. collection_id (Collection  Χ  Movie_Collection) 
+            AND σ Movie. m_id= Movie_Collection. movie_id (Movie X Movie_Collection)
+        )]
 
-    ~ κατηγορίες ταινιών οι οποίες έχουν μέση βαθμολογία των χρηστών είναι άνω του 3 
-    Π Gerne. category, avg(Ratings) [
-        σ avg. rating > 3(Rating JOIN Movie_Gernes)
+    ~ κατηγορίες ταινιών οι οποίες έχουν μέση βαθμολογία των χρηστών είναι μετάξυ 3 και 5 
+    Π Gerne. category, avg(Ratings.rating) [
+        σ avg. rating between 3 and 5(Rating JOIN Movie_Gernes)
         AND σ Gerne.id=Movie_Gernes. gerne_id(Gerne X Movie )]
 
-    ~ όνομα ταινιών και η διάρκεια τους που έχουν ως βασικό χαρακτηριστικό την comedy (outer join)
+    ~ όνομα ταινιών και η διάρκεια τους που έχουν ως βασικό χαρακτηριστικό την comedy (outer join for runtime)
+    Π Movie. title, Movie. runtime[
+        σ Keyword.keyword="comedy" (Keyword JOIN Movie_Keywords)
+        AND σ Movie.m_id= Movie_Keywords. movie_id(Movie X Movie_Keywords )]
+
     ~ όνομα των ταινιών και η μέρα πρεμιέρας ταινιών του ηθοποιού will smith (outer join)
-    ~ κατάταξη των παραγωγών των εταιριών που έχουν δώσει έχουν ταινίες με μηδενικό budget
+    Π Movie. title, Movie. release_date[
+        σ Crew.name="Will Smith" (
+            Π Crew.job (
+                σCrew.job="Actor") 
+            JOIN Movie)]
+        
+    ~ κατάταξη των παραγωγών των εταιριών που έχουν δώσει ταινίες με μηδενικό budget (ORDER BY)
+    Π Production.company, Movie. title[
+        σ Movie.budget=0 (Movie JOIN Movie_Production)
+        AND σ Production.id= Movie_Production. pc_id(Production X Movie_Production )]
+
     ~ ηθοποιοί και οι ρόλοι που έχουν παίξει σε ταινίες με κατηγορία thriller
-    ~ταινιες που η βαθμολογια τους ειναι πανω απο τον μεσο ορο βαθμολογιων
-    ~ηθοποιοι που επαναλαμβανονται σε ταινιες που ο μεσος ορος τους ειναι πανω απο τον μεσο ορο βαθμολογιων
-    ~ταινιες που το μεγαλυτερο πληθος των συντελεστων ειναι αμερικανοι 
-    ~κριτικες σε ταινιες με εσοδα ανω του μεσου ορου εσοδων
-    ~κριτικες για ταινιες που εχουν παραχθει εκτος αμερικης 
-    ~κριτικες για ταινιες που η γλωσσα ομιλιας δεν ειναι η αγγλικη
+    Π Crew.company, Movie. title[
+        σ Keyword.keyword="comedy" (Keyword JOIN Movie_Keywords)
+        AND σ Movie.m_id= Movie_Keywords. movie_id(Movie X Movie_Keywords )
+        AND σ Crew.movie_id= Movie. m_id(Crew X Movie )]
+
+    ~ ταινιες που η βαθμολογια τους ειναι πανω απο τον μεσο ορο βαθμολογιων
+    ~ ηθοποιοι που επαναλαμβανονται σε ταινιες που ο μεσος ορος τους ειναι πανω απο τον (μεσο ορο) count ταινίων 
+    ~ ταινιες που το μεγαλυτερο πληθος των συντελεστων ειναι αμερικανοι 
+    ~ κριτικες σε ταινιες με εσοδα ανω του μεσου ορου εσοδων (εμφολευμένο select)
+    ~ κριτικες για ταινιες που εχουν παραχθει εκτος αμερικης 
+    ~ κριτικες για ταινιες που η γλωσσα ομιλιας δεν ειναι η αγγλικη
