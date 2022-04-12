@@ -1,0 +1,38 @@
+                                            Queries notes
+
+* Important tables:
+
+    ~ Movie (m_id,adult,budget,homepage,original_language,original_title,title,tagline,overview,popularity,release_date,revenue,runtime)
+    ~ Gerne(id, category)
+    ~ Keyword(k_id, keyword)
+    ~ Cast_table(movie_id, cast_id, character, gender, person_id, name)
+    ~ Movie_Gernes(movie_id, gerne_id)
+    ~ Movie_Keywords(movie_id, keyword_id)
+    ~ Ratings(user_id, movie_id,rating)
+
+* Less-Important tables:
+
+   
+    ~ Collection(id, name)
+    ~ Crew(movie_id, department, gender, person_id, job, name)
+    ~ Movie_Collection(movie_id, collection_id)
+    ~ Production(id, company)
+    ~ Movie_Production(movie_id, pc_id)
+
+* The Queries:
+
+    ~ ονόματα ταινιών από συλλογές που έχουν μέγιστη βαθμολογία πάνω από 4  
+    Π Collection.name,Movie.title[
+        σ max.rating>4(Ratings JOIN Movie) 
+        AND σ Collection.id= Movie_Collection. collection_id(Collection X Movie_Collection) 
+        AND σ Movie. m_id= Movie_Collection. movie_id (Movie X Movie_Collection) ]
+
+    ~ κατηγορίες ταινιών οι οποίες έχουν μέση βαθμολογία των χρηστών είναι άνω του 3 
+    Π Gerne. category, avg(Ratings) [
+        σ avg. rating > 3(Rating JOIN Movie_Gernes)
+        AND σ Gerne.id=Movie_Gernes. gerne_id(Gerne X Movie )]
+
+    ~ όνομα ταινιών και η διάρκεια τους που έχουν ως βασικό χαρακτηριστικό την comedy (outer join)
+    ~ όνομα των ταινιών και η μέρα πρεμιέρας ταινιών του ηθοποιού will smith (outer join)
+    ~ κατάταξη των παραγωγών των εταιριών που έχουν δώσει έχουν ταινίες με μηδενικό budget
+    ~ ηθοποιοί και οι ρόλοι που έχουν παίξει σε ταινίες με κατηγορία thriller
