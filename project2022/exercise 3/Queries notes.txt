@@ -51,7 +51,7 @@
         AND σ Production.id= Movie_Production. pc_id(Production X Movie_Production )]
 
     ~ ηθοποιοί και οι ρόλοι που έχουν παίξει σε ταινίες με κατηγορία thriller
-    Π Crew.company, Movie. title[
+    Π Crew.name, Movie. title[
         σ Keyword.keyword="comedy" (Keyword JOIN Movie_Keywords)
         AND σ Movie.m_id= Movie_Keywords. movie_id(Movie X Movie_Keywords )
         AND σ Crew.movie_id= Movie. m_id(Crew X Movie )]
