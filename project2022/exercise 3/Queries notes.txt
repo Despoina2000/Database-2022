@@ -57,9 +57,18 @@
         AND σ Crew.movie_id= Movie. m_id(Crew X Movie )]
 
     ~ ταινιες που η βαθμολογια τους ειναι πανω απο τον μεσο ορο βαθμολογιων
+    Π Movie.title[
+        σ Movie.ratings>avg(Movie.rating)
+        AND σ Movie.m_id= rating.movie_id
+    ]
     ~ ηθοποιοι που επαναλαμβανονται σε ταινιες που ο μεσος ορος τους ειναι πανω απο τον (μεσο ορο) count ταινίων 
     ~ ταινιες που το μεγαλυτερο πληθος των συντελεστων ειναι αμερικανοι 
+
     ~ κριτικες σε ταινιες με εσοδα ανω του μεσου ορου εσοδων (εμφολευμένο select)
+    Π Movie.ratings[
+        σ Movie.revenue >avg(Movie.revenue)
+        AND σ rating.movie_id= Movie.m_id
+    ]
     ~ φυλα για τους ηθοποιους καθε ταινιας που εκανε revenue ανω των 2000000
     Π movie_cast.gender[
         σ Movie.revenue>2000000
