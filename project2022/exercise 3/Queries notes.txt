@@ -64,9 +64,9 @@
         σ Ratings.rating>avg(Ratings.rating)
         AND σ Movie.m_id= Ratings.movie_id     
     ]
-    ~ ηθοποιοι που επαναλαμβανονται σε ταινιες που ο μεσος ορος τους ειναι πανω απο τον (μεσο ορο) count ταινίων
-
-
+   ~ οι ηθοποιοί και το πλήθος των ταινιών που έχουν παίξει
+Π Crew.name, count ()
+σ 
     ~ ταινιες που το μεγαλυτερο πληθος των συντελεστων ανήκουν στο department Art 
 Π Movie.title, Crew.department[
     σ Movie.m_id = Crew. movie_id
