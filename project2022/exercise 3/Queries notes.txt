@@ -50,32 +50,54 @@
         σ Movie.budget=0 (Movie JOIN Movie_Production)
         AND σ Production.id= Movie_Production. pc_id(Production X Movie_Production )]
 
-    ~ ηθοποιοί και οι ρόλοι που έχουν παίξει σε ταινίες με κατηγορία thriller
-    Π Crew.name, Movie. title[
-        σ Keyword.keyword="comedy" (Keyword JOIN Movie_Keywords)
+    ~ ηθοποιοί και οι ρόλοι που έχουν παίξει σε ταινίες με keyword thriller
+    Π Crew.name ,Cast_table.character [
+        σ Keyword.keyword="thriller" (Keyword JOIN Movie_Keywords)
         AND σ Movie.m_id= Movie_Keywords. movie_id(Movie X Movie_Keywords )
-        AND σ Crew.movie_id= Movie. m_id(Crew X Movie )]
+        AND σ Crew.movie_id= Movie. m_id(Crew X Movie )
+        AND σ Cast_table.movie_id= Movie. m_id(Cast_table X Movie )
+        AND σ Cast_table.person_id= Crew. movie_id(Cast_table X Crew )
+        AND σCrew.job="Actor"]
 
     ~ ταινιες που η βαθμολογια τους ειναι πανω απο τον μεσο ορο βαθμολογιων
-    Π Movie.title[
-        σ Movie.ratings>avg(Movie.rating)
-        AND σ Movie.m_id= rating.movie_id
+    Π Movie.title, Ratings.rating[
+        σ Ratings.rating>avg(Ratings.rating)
+        AND σ Movie.m_id= Ratings.movie_id     
     ]
-    ~ ηθοποιοι που επαναλαμβανονται σε ταινιες που ο μεσος ορος τους ειναι πανω απο τον (μεσο ορο) count ταινίων 
-    ~ ταινιες που το μεγαλυτερο πληθος των συντελεστων ειναι αμερικανοι 
+    ~ ηθοποιοι που επαναλαμβανονται σε ταινιες που ο μεσος ορος τους ειναι πανω απο τον (μεσο ορο) count ταινίων
+
+
+    ~ ταινιες που το μεγαλυτερο πληθος των συντελεστων ανήκουν στο department Art 
+Π Movie.title, Crew.department[
+    σ Movie.m_id = Crew. movie_id
+    AND (Π Count(person_id), Crew.department )  
+
+
+SELECT DISTINCT Movie.title, Crew.department
+FROM Crew AS x, Movie
+WHERE Count (
+    SELECT x.person_id
+    FROM
+    WHERE x.department= "Art"
+) > ALL(
+    SELECT Count(y.person_id)
+    FROM Crew AS y
+    WHERE x.movie_id = y.movie_id) 
+AND x.movie_id = Movie.m_id
 
     ~ κριτικες σε ταινιες με εσοδα ανω του μεσου ορου εσοδων (εμφολευμένο select)
-    Π Movie.ratings[
+    Π Movie.title, Ratings.rating, Movie.revenue[
         σ Movie.revenue >avg(Movie.revenue)
         AND σ rating.movie_id= Movie.m_id
     ]
-    ~ φυλα για τους ηθοποιους καθε ταινιας που εκανε revenue ανω των 2000000
-    Π movie_cast.gender[
+    ~ φυλα για τους ηθοποιους καθε ταινιας που εκανε revenue ανω των 2000000 (DIST)
+    Π Cast_table.gender[
         σ Movie.revenue>2000000
         AND σ Movie.m_id=cast.movie_id
     ]
-    ~ κριτικες για ταινιες που η γλωσσα ομιλιας δεν ειναι η αγγλικη
-      Π Movie.ratings[
+    ~ id ταίνιων με την κατηγορία που η γλωσσα ομιλιας δεν ειναι η αγγλικη
+      Π Movie.m_id, Gerne.category[
         σ Movie.original_language<>"en"
-        AND  σ ratings.movie_id = Movie.m_id
+        AND  σ Movie_Gernes.movie_id = Movie.m_id
+        AND  σ Movie_Gernes.gerne_id = Gerne.id
     ] 
