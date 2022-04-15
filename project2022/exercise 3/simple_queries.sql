@@ -15,6 +15,7 @@ FROM Ratings r,  Movie_Genre mg, Genre
  WHERE r.movie_id= mg. movie_id AND Genre.id = mg.genre_id
 GROUP BY Genre.category
 HAVING avg(r.rating)  between 3 and 5
+
 /*Query 3: name of films and their duration that have as their main feature the comedy
 Output: 4 rows*/
 SELECT m.title, m.runtime
@@ -27,7 +28,6 @@ HAVING k.keyword LIKE '%comedy%'
 
 /*Query 4: name of the films and the opening day of actor will smith's films
 Output: 16 rows*/
-
 SELECT Movie. title, Movie. release_date
 FROM Cast_table
 RIGHT OUTER JOIN Movie 
