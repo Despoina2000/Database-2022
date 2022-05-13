@@ -1,0 +1,6 @@
+Δέσποινα Παπαδοπούλου 3180146
+Αναστασία Κατσαΐτη    3190080
+End-point: p3180146server.postgres.database.azure.com
+Username:p3180146@p3180146server
+Password:Life can only be understood backwards; but it must be lived forwards
+Datapase:azure_db
