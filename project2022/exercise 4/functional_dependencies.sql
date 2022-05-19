@@ -21,9 +21,9 @@ update "Movie_Cast" set character='UNKNOWN' where character IS NULL
 /*Alter table: */
 BEGIN;
 alter table Cast_table
-add unique key (person_id);
+add foreign  key (person_id) REFERENCES (Actor);
 
 alter table Crew
-add unique key (person_id);
+add foreign key (person_id) REFERENCES (CrewMember);
 
 COMMIT;
