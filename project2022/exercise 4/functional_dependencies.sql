@@ -19,3 +19,11 @@ DELETE FROM crew WHERE COUNT (DISTINCT gender)>1 OR COUNT (DISTINCT name)>1;
 update "Movie_Cast" set character='UNKNOWN' where character IS NULL
 
 /*Alter table: */
+BEGIN;
+alter table Cast_table
+add unique key (person_id);
+
+alter table Crew
+add unique key (person_id);
+
+COMMIT;
