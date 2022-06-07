@@ -30,6 +30,7 @@ y = np.array(array_y_six)
 plt.xlabel('USER ID')
 plt.ylabel('AVG RATING')
 plt.scatter(x, y,s=1)
+plt.savefig("Query6.png", dpi = 1000)
 plt.show()
 
 # scatter plot for query seven
@@ -47,6 +48,7 @@ y = np.array(array_y_seven)
 plt.xlabel('USER ID')
 plt.ylabel('COUNT RATING')
 plt.scatter(x, y,s=1)
+plt.savefig("Query7.png", dpi = 1000)
 plt.show()
 
 # scatter plot for query eight
@@ -94,4 +96,3 @@ plt.show()
 conn.commit()
 cursor.close()
 conn.close()
-
