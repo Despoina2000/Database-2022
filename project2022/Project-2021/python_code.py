@@ -14,9 +14,10 @@ sslmode = "require"
 conn_string = "host={0} user={1} dbname={2} password={3} sslmode={4}".format(host, user, dbname, password, sslmode)
 conn = psycopg2.connect(conn_string)
 print("Connection established")
+cursor = conn.cursor()
 
 # scatter plot for query one
-cursor = conn.cursor()
+
 cursor.execute("SELECT EXTRACT(year FROM m.release_Date) AS year, COUNT (m.id) FROM \"Movie\" m GROUP BY EXTRACT(year FROM m.release_Date) HAVING EXTRACT(year FROM m.release_Date) is not null ORDER BY EXTRACT(year FROM m.release_Date);")
 rows = cursor.fetchall()
 array_x_one=[]
@@ -33,7 +34,6 @@ plt.bar(x, y)
 plt.savefig("Query1.png", dpi = 1000)
 plt.show()
 # scatter plot for query two
-cursor = conn.cursor()
 cursor.execute("SELECT g.name, COUNT (m.id) FROM \"Movie\" m , \"Movie_Genres\" mg, \"Genre\" g WHERE m.id = mg.movie_id AND g.id = mg.genre_id GROUP BY g.name ORDER BY g.name;")
 rows = cursor.fetchall()
 array_x_two=[]
@@ -51,7 +51,7 @@ plt.savefig("Query2.png", dpi = 1000)
 plt.show()
 
 # scatter plot for query three
-cursor = conn.cursor()
+
 cursor.execute("SELECT EXTRACT(year FROM m.release_Date) AS year, g.name, COUNT (m.id) FROM \"Movie\" m , \"Movie_Genres\" mg, \"Genre\" g WHERE m.id = mg.movie_id AND g.id = mg.genre_id GROUP BY EXTRACT(year FROM m.release_Date), g.name HAVING EXTRACT(year FROM m.release_Date) is not null AND COUNT (m.id)>0 ORDER BY EXTRACT(year FROM m.release_Date), g.name;")
 rows = cursor.fetchall()
 array_x_three=[]
@@ -91,7 +91,7 @@ ax1.set_zlim([0, max(zVal)])
 plt.xticks(range(len(xDict.values())), xDict.keys())
 plt.show()
 # scatter plot for query four
-cursor = conn.cursor()
+
 cursor.execute("SELECT EXTRACT(year FROM m.release_Date) AS year, MAX(m.budget) FROM \"Movie\" m GROUP BY EXTRACT(year FROM m.release_Date)HAVING EXTRACT(year FROM m.release_Date) is not null ORDER BY EXTRACT(year FROM m.release_Date);")
 rows = cursor.fetchall()
 array_x_four=[]
@@ -108,7 +108,7 @@ plt.bar(x, y)
 plt.savefig("Query4.png", dpi = 1000)
 plt.show()
 # scatter plot for query five
-cursor = conn.cursor()
+
 cursor.execute("SELECT EXTRACT(year FROM m.release_Date) AS year, SUM(m.revenue) FROM \"Movie\" m, \"Movie_Cast2\" mc WHERE m.id = mc.movie_id AND mc.person_id = 4173 GROUP BY EXTRACT(year FROM m.release_Date) ORDER BY EXTRACT(year FROM m.release_Date);")
 rows = cursor.fetchall()
 array_x_five=[]
@@ -126,7 +126,7 @@ plt.savefig("Query5.png", dpi = 1000)
 plt.show()
 
 # scatter plot for query six
-cursor = conn.cursor()
+
 cursor.execute("SELECT r.user_id, CAST(AVG(r.rating) AS DECIMAL(10,2)) FROM \"Ratings\" r GROUP BY r.user_id ORDER BY r.user_id;")
 rows = cursor.fetchall()
 array_x_six=[]
@@ -144,7 +144,7 @@ plt.savefig("Query6.png", dpi = 1000)
 plt.show()
 
 # scatter plot for query seven
-cursor = conn.cursor()
+
 cursor.execute("SELECT r.user_id, COUNT(r.rating) FROM \"Ratings\" r GROUP BY r.user_id ORDER BY r.user_id")
 rows = cursor.fetchall()
 array_x_seven=[]
@@ -162,7 +162,7 @@ plt.savefig("Query7.png", dpi = 1000)
 plt.show()
 
 # scatter plot for query eight
-cursor = conn.cursor()
+
 cursor.execute("SELECT r.user_id, CAST(AVG(r.rating) AS DECIMAL(10,2)), COUNT(r.rating) FROM \"Ratings\" r GROUP BY r.user_id ORDER BY r.user_id")
 rows = cursor.fetchall()
 array_x_eight=[]
