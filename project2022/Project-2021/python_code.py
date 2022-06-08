@@ -17,7 +17,7 @@ print("Connection established")
 
 # scatter plot for query one
 cursor = conn.cursor()
-cursor.execute("SELECT EXTRACT(year FROM m.release_Date) AS year, COUNT (m.id) FROM \"Movie\" m GROUP BY EXTRACT(year FROM m.release_Date) ORDER BY EXTRACT(year FROM m.release_Date);")
+cursor.execute("SELECT EXTRACT(year FROM m.release_Date) AS year, COUNT (m.id) FROM \"Movie\" m GROUP BY EXTRACT(year FROM m.release_Date) HAVING EXTRACT(year FROM m.release_Date) is not null ORDER BY EXTRACT(year FROM m.release_Date);")
 rows = cursor.fetchall()
 array_x_one=[]
 array_y_one=[]
@@ -34,7 +34,7 @@ plt.savefig("Query1.png", dpi = 1000)
 plt.show()
 # scatter plot for query two
 cursor = conn.cursor()
-cursor.execute("SELECT g.name, COUNT (m.id) FROM \"Movie\" m , \"Movie_Genre\" mg, \"Genre\" g WHERE m.id = mg.movie_id AND g.id = mg.genre_id GROUP BY g.name ORDER BY g.name;")
+cursor.execute("SELECT g.name, COUNT (m.id) FROM \"Movie\" m , \"Movie_Genres\" mg, \"Genre\" g WHERE m.id = mg.movie_id AND g.id = mg.genre_id GROUP BY g.name ORDER BY g.name;")
 rows = cursor.fetchall()
 array_x_two=[]
 array_y_two=[]
@@ -52,14 +52,14 @@ plt.show()
 
 # scatter plot for query three
 cursor = conn.cursor()
-cursor.execute("SELECT EXTRACT(year FROM m.release_Date) AS year, g.name, COUNT (m.id) FROM \"Movie\" m , \"Movie_Genre\" mg, \"Genre\" g WHERE m.id = mg.movie_id AND g.id = mg.genre_id GROUP BY EXTRACT(year FROM m.release_Date), g.name ORDER BY EXTRACT(year FROM m.release_Date), g.name;")
+cursor.execute("SELECT EXTRACT(year FROM m.release_Date) AS year, g.name, COUNT (m.id) FROM \"Movie\" m , \"Movie_Genres\" mg, \"Genre\" g WHERE m.id = mg.movie_id AND g.id = mg.genre_id GROUP BY EXTRACT(year FROM m.release_Date), g.name HAVING EXTRACT(year FROM m.release_Date) is not null AND COUNT (m.id)>0 ORDER BY EXTRACT(year FROM m.release_Date), g.name;")
 rows = cursor.fetchall()
 array_x_three=[]
 array_y_three=[]
 array_z_three=[]
 for row in rows:
-    array_x_three.append(row[0])
-    array_y_three.append(row[1])
+    array_x_three.append(row[1])
+    array_y_three.append(row[0])
     array_z_three.append(row[2])
 xVal = array_x_three
 yVal = array_y_three
@@ -83,16 +83,16 @@ for category in xCategories:
 # Defining the starting position of each bar (x is already defined)
 z = np.zeros(len(x))
 # Defining the length/width/height of each bar.
-dx = np.ones(len(x))*0.1
+dx = np.ones(len(x))*0.01
 dy = np.ones(len(x))
 dz = zVal
-ax1.scatter(x, yVal, z, dx, dy, dz)
+ax1.bar3d(x, yVal, z, dx, dy, dz)
 ax1.set_zlim([0, max(zVal)])
 plt.xticks(range(len(xDict.values())), xDict.keys())
 plt.show()
 # scatter plot for query four
 cursor = conn.cursor()
-cursor.execute("SELECT EXTRACT(year FROM m.release_Date) AS year, MAX(m.budget) FROM \"Movie\" m GROUP BY EXTRACT(year FROM m.release_Date) ORDER BY EXTRACT(year FROM m.release_Date);")
+cursor.execute("SELECT EXTRACT(year FROM m.release_Date) AS year, MAX(m.budget) FROM \"Movie\" m GROUP BY EXTRACT(year FROM m.release_Date)HAVING EXTRACT(year FROM m.release_Date) is not null ORDER BY EXTRACT(year FROM m.release_Date);")
 rows = cursor.fetchall()
 array_x_four=[]
 array_y_four=[]
@@ -109,7 +109,7 @@ plt.savefig("Query4.png", dpi = 1000)
 plt.show()
 # scatter plot for query five
 cursor = conn.cursor()
-cursor.execute("SELECT EXTRACT(year FROM m.release_Date) AS year, SUM(m.revenue) FROM \"Movie\" m, \"Movie_Cast\" mc WHERE m.id = mc.movie_id AND mc.person_id = 4173 GROUP BY EXTRACT(year FROM m.release_Date) ORDER BY EXTRACT(year FROM m.release_Date);")
+cursor.execute("SELECT EXTRACT(year FROM m.release_Date) AS year, SUM(m.revenue) FROM \"Movie\" m, \"Movie_Cast2\" mc WHERE m.id = mc.movie_id AND mc.person_id = 4173 GROUP BY EXTRACT(year FROM m.release_Date) ORDER BY EXTRACT(year FROM m.release_Date);")
 rows = cursor.fetchall()
 array_x_five=[]
 array_y_five=[]
