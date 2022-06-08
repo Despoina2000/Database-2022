@@ -201,7 +201,24 @@ ax1.scatter(x, yVal, z, dx, dy, dz)
 ax1.set_zlim([0, max(zVal)])
 plt.xticks(range(len(xDict.values())), xDict.keys())
 plt.show()
-    
+
+# scatter plot for query eight
+cursor.execute("SELECT g.name, CAST(AVG(r.rating) AS DECIMAL(10,2)) FROM \"Genre\" g, \"Movie_Genres\" mg, \"Ratings\" r WHERE r.movie_id = mg.movie_id AND g.id = mg.genre_id GROUP BY g.name ORDER BY g.name;")
+rows = cursor.fetchall()
+array_x_eight=[]
+array_y_eight=[]
+for row in rows:
+    print("Data row = (%s,%s)" %(str(row[0]),str(row[1])))
+    array_x_eight.append(row[0])
+    array_y_eight.append(row[1])
+x = np.array(array_x_eight)
+y = np.array(array_y_eight)
+plt.xlabel('GERNE')
+plt.ylabel('AVG RATING')
+plt.bar(x, y)
+plt.savefig("Query9.png", dpi = 1000)
+plt.show()
+
 # Clean up
 conn.commit()
 cursor.close()
