@@ -25,3 +25,7 @@ and 3 if it is three-dimensional, so that we can store the output of the results
 of the variable rows.
 4. Store in numpy array format and put it as a parameter in the corresponding
 representation program.
+
+## Team Members
+- [Anastasia Katsaiti](https://github.com/akatsaiti)
+- [Despoina Papadopoulou](https://github.com/Despoina2000)
